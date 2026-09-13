@@ -103,16 +103,24 @@ The dashboard was designed to answer the following questions:
 
 ---
 
-## 🔄 Analytics Workflow
+## 🔄 ETL & Analytics Workflow
 
 ```mermaid
 flowchart TD
-    A["Raw Excel Tables"] --> B["Power Query Cleaning"]
-    B --> C["Transformation &<br/>Denormalization"]
-    C --> D["Star-Style Data Model"]
-    D --> E["DAX Measures"]
-    E --> F["Interactive Power BI<br/>Dashboard"]
-    F --> G["Business Insights &<br/>Recommendations"]
+    subgraph ETL["ETL Process"]
+        direction TD
+
+        A["Extract<br/>Raw Excel Tables"]
+        B["Transform<br/>Power Query Cleaning"]
+        C["Transform<br/>Merging & Denormalization"]
+        D["Load<br/>Power BI Star-Schema Data Model"]
+
+        A --> B --> C --> D
+    end
+
+    D --> E["Analysis<br/>DAX Measures"]
+    E --> F["Reporting<br/>Interactive Power BI Dashboard"]
+    F --> G["Output<br/>Business Insights & Recommendations"]
 ```
 
 <div align="right"><a href="#top">⬆ back to top</a></div>
