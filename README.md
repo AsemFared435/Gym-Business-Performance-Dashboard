@@ -42,7 +42,7 @@ The dashboard was designed to answer the following questions:
 flowchart TD
     A["Raw Excel Tables"] --> B["Power Query Cleaning"]
     B --> C["Transformation & Denormalization"]
-    C --> D["Star-Style Data Model"]
+    C --> D["Star-Schema Data Model"]
     D --> E["DAX Measures"]
     E --> F["Interactive Power BI Dashboard"]
     F --> G["Business Insights & Recommendations"]
@@ -232,7 +232,7 @@ For Canada in 2012, revenue increased by **51%**, profit by **52%**, and cost by
 - **Power Query** — cleaning, merging, and transforming source tables.
 - **DAX** — KPIs, time intelligence, ratios, rankings, and dynamic titles.
 - **Excel** — original tabular data sources.
-- **Data Modeling** — denormalization, shared dimensions, and star-style modeling.
+- **Data Modeling** — denormalization, shared dimensions, and star-Schema modeling.
 
 ## Repository Structure
 
