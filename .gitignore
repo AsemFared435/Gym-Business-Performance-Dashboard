@@ -1,0 +1,12 @@
+# Source data is intentionally excluded from the public repository.
+data/
+*.xlsx
+*.xls
+*.csv
+*.tsv
+*.parquet
+
+# Local Power BI cache and temporary files
+*.tmp
+~$*
+
