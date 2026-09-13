@@ -1,8 +1,43 @@
-# Gym Business Performance Dashboard
+<a name="top"></a>
+<div align="center">
+
+# 🏋️ Gym Business Performance Dashboard
 
 ![Gym Business Performance Dashboard cover](images/00-cover.png)
 
-## Project Overview
+<p>
+  <img alt="Power BI" src="https://img.shields.io/badge/Power%20BI-F2C811?style=flat&logo=powerbi&logoColor=black">
+  <img alt="DAX" src="https://img.shields.io/badge/DAX-217346?style=flat&logo=microsoft&logoColor=white">
+  <img alt="Power Query" src="https://img.shields.io/badge/Power%20Query-004B87?style=flat&logo=powerquery&logoColor=white">
+  <img alt="Excel" src="https://img.shields.io/badge/Excel-217346?style=flat&logo=microsoftexcel&logoColor=white">
+</p>
+
+*Transforming fragmented Excel tables into an interactive business performance dashboard for a gym and fitness-products business.*
+
+</div>
+
+---
+
+## 📑 Table of Contents
+
+- [Project Overview](#-project-overview)
+- [Dataset Overview](#-dataset-overview)
+- [Business Objectives](#-business-objectives)
+- [Headline KPIs](#-headline-kpis)
+- [Analytics Workflow](#-analytics-workflow)
+- [Data Transformation](#-data-transformation)
+- [Data Modeling](#-data-modeling)
+- [Dashboard Pages](#-dashboard-pages)
+- [Main Business Recommendations](#-main-business-recommendations)
+- [Analytical Features](#-analytical-features)
+- [Important Data Notes](#-important-data-notes)
+- [Tools and Skills](#-tools-and-skills)
+- [Repository Structure](#-repository-structure)
+- [Author](#-author)
+
+---
+
+## 📌 Project Overview
 
 This Power BI project transforms a group of fragmented Excel tables into an interactive business performance dashboard for a gym and fitness-products business. The report brings revenue, gross profit, cost, customer behavior, product performance, returns, locations, and time trends into one analytical experience.
 
@@ -10,7 +45,31 @@ The work covered the full analytics process: understanding the source tables, cl
 
 > **Data availability:** The source Excel files are intentionally not included in this public repository. This repository documents the analytical process, data model, dashboard design, and findings.
 
-## Business Objectives
+<div align="right"><a href="#top">⬆ back to top</a></div>
+
+---
+
+## 🗄️ Dataset Overview
+
+| Attribute | Value |
+| --- | --- |
+| Source | 9 Excel tables |
+| Period | December 2010 – November 2013 |
+| SalesDetails (transaction rows) | 60,855 |
+| Orders | 3,796 |
+| Customers | 701 (635 with orders, 66 without orders) |
+| Products | 349 |
+| Countries | 6 |
+
+> **Note:** The 60,855 row count refers to the **SalesDetails** table only, not the sum of rows across all source tables. A single order can span multiple SalesDetails rows, since each row represents one product line within that order.
+
+**Original source tables:** `Customers`, `Geography`, `Region`, `Product`, `ProductSubcategory`, `ProductCostHistory`, `SalesHeader`, `SalesDetails`, `SalesReturns`.
+
+<div align="right"><a href="#top">⬆ back to top</a></div>
+
+---
+
+## 🎯 Business Objectives
 
 The dashboard was designed to answer the following questions:
 
@@ -22,69 +81,103 @@ The dashboard was designed to answer the following questions:
 - Where are returns concentrated, and which products require attention?
 - Which regions, states, cities, and customers explain location-level changes?
 
-## Headline KPIs
+<div align="right"><a href="#top">⬆ back to top</a></div>
+
+---
+
+## 📊 Headline KPIs
 
 | KPI | Result |
 | --- | ---: |
-| Revenue | **$78.87M** |
-| Gross Profit | **$54.17M** |
-| Total Cost | **$24.70M** |
-| Gross Margin | **68.7%** |
-| Quantity Sold | **214K** |
-| Customers with Orders | **635** |
-| Customers without Orders | **66** |
-| Orders | **3,796** |
-| Return Amount | **$6.39M** |
+| 💵 Revenue | **$78.87M** |
+| 📈 Gross Profit | **$54.17M** |
+| 💸 Total Cost | **$24.70M** |
+| 📐 Gross Margin | **68.7%** |
+| 📦 Quantity Sold | **214K** |
+| ✅ Customers with Orders | **635** |
+| ⚠️ Customers without Orders | **66** |
+| 🧾 Orders | **3,796** |
+| 🔄 Return Amount | **$6.39M** |
 
-## Analytics Workflow
+<div align="right"><a href="#top">⬆ back to top</a></div>
+
+---
+
+## 🔄 Analytics Workflow
 
 ```mermaid
 flowchart TD
     A["Raw Excel Tables"] --> B["Power Query Cleaning"]
-    B --> C["Transformation & Denormalization"]
+    B --> C["Transformation &<br/>Denormalization"]
     C --> D["Star-Style Data Model"]
     D --> E["DAX Measures"]
-    E --> F["Interactive Power BI Dashboard"]
-    F --> G["Business Insights & Recommendations"]
+    E --> F["Interactive Power BI<br/>Dashboard"]
+    F --> G["Business Insights &<br/>Recommendations"]
 ```
 
-## Data Preparation
+<div align="right"><a href="#top">⬆ back to top</a></div>
 
-The original data was distributed across sales, returns, customer, geography, region, product, subcategory, and product-cost-history tables. The main preparation steps included:
+---
 
-- Standardizing column names, data types, and keys.
-- Validating customer, product, order, and return relationships.
-- Merging geography and region attributes into an analysis-ready customer dimension.
-- Merging product and subcategory attributes into a consolidated product dimension.
-- Bringing header-level sales attributes into the sales-detail fact table.
-- Allocating each order discount proportionally across its line items.
-- Matching product costs to the relevant product and time period.
-- Creating a dedicated date table with month, quarter, and year attributes.
-- Separating sales and returns into two fact tables connected to shared dimensions.
+## 🧹 Data Transformation
 
-## Data Modeling
+The original data was distributed across sales, returns, customer, geography, region, product, subcategory, and product-cost-history tables. The main transformation steps included:
 
-### Original Model
+1. Standardize column names and data types.
+2. Merge Geography and Region into Customer.
+3. Merge ProductSubcategory into Product.
+4. Merge SalesHeader data into SalesDetails.
+5. Add the variable cost from ProductCostHistory to SalesDetails, matched by product, location, and period.
+6. Allocate the order discount to its line items proportionally, using:
 
-The initial normalized model contained multiple chained lookup tables and several possible filter paths.
+   ```text
+   Allocated Line Discount =
+       (Line Sales Before Discount / Order Sales Before Discount) × Order Discount
+   ```
 
-![Original normalized data model](images/09-data-model-before.png)
+7. Subtract each line's allocated discount to calculate its post-discount revenue.
+8. Create a Date Table.
+9. Organize the model into SalesDetails and SalesReturns as Fact tables, with Product, Customer, and Date as shared dimensions.
 
-### Optimized Model
+<div align="right"><a href="#top">⬆ back to top</a></div>
 
-The model was reshaped into an analytics-ready, star-style fact constellation:
+---
 
-- **SalesDetails:** sales transactions and line-level commercial measures.
-- **SalesReturns:** return transactions and returned quantities/amounts.
-- **Product:** consolidated product, subcategory, category, size, and detail attributes.
-- **Customer:** consolidated customer and location attributes.
-- **Date Table:** shared calendar dimension for time intelligence.
+## 🗂️ Data Modeling
 
-![Optimized star-style data model](images/10-data-model-after.png)
+### Before → After
+
+| Original Model | Optimized Model |
+| :---: | :---: |
+| ![Original normalized data model](images/09-data-model-before.png) | ![Optimized star-style data model](images/10-data-model-after.png) |
+| Multiple chained lookup tables with several possible filter paths. | Reshaped into an analytics-ready, star-style fact constellation. |
+
+**The optimized model consists of:**
+
+- **SalesDetails** — sales transactions and line-level commercial measures.
+- **SalesReturns** — return transactions and returned quantities/amounts.
+- **Product** — consolidated product, subcategory, category, size, and detail attributes.
+- **Customer** — consolidated customer and location attributes.
+- **Date Table** — shared calendar dimension for time intelligence.
 
 This structure reduced model complexity, simplified filter propagation, and made the DAX measures easier to maintain.
 
-## Dashboard Pages
+<div align="right"><a href="#top">⬆ back to top</a></div>
+
+---
+
+## 📊 Dashboard Pages
+
+| # | Page |
+| :---: | --- |
+| 1 | [Business Overview](#1-business-overview) |
+| 2 | [Customer Analysis](#2-customer-analysis) |
+| 3 | [Product Analysis](#3-product-analysis) |
+| 4 | [Returns Analysis](#4-returns-analysis) |
+| 5 | [Revenue Trend Analysis](#5-revenue-trend-analysis) |
+| 6 | [Profit Trend Analysis](#6-profit-trend-analysis) |
+| 7 | [Cost Trend Analysis](#7-cost-trend-analysis) |
+| 8 | [Location Drill-Through](#8-location-drill-through) |
 
 ### 1. Business Overview
 
@@ -92,7 +185,7 @@ This structure reduced model complexity, simplified filter propagation, and made
 
 The overview page summarizes performance by year, quarter, country, product category, and business type.
 
-Key findings:
+**Key Findings**
 
 - Revenue reached **$78.87M**, generating **$54.17M** in gross profit at a **68.7% gross margin**.
 - The United States was the largest market with approximately **$52M** in revenue, followed by Canada with **$14M**.
@@ -106,7 +199,7 @@ Key findings:
 
 This page analyzes customer activation, order frequency, cohort behavior, regional profitability, and customers with no orders.
 
-Key findings:
+**Key Findings**
 
 - The customer table contains **701 customer records**: **635** customers placed at least one order, while **66** never placed an order.
 - The business generated **3,796 orders**, or approximately **6 orders per active customer** across the available period.
@@ -121,7 +214,7 @@ Key findings:
 
 The product page compares price bands, margins, costs, returns, average order value, and the strongest products by different business measures.
 
-Key findings:
+**Key Findings**
 
 - Products priced below $2,000 generated approximately **86% of total revenue**.
 - The price band above $2,000 produced the highest gross margin at **71.3%**, but contributed only around **$11M** in revenue.
@@ -137,7 +230,7 @@ Key findings:
 
 This page evaluates returned value, quantity, orders, customers, categories, business types, regions, and monthly patterns.
 
-Key findings:
+**Key Findings**
 
 - Returns totaled **$6.39M**, equal to **8.1% of sales**.
 - Approximately **14K units** were returned, representing **6.73% of sold quantity**.
@@ -151,7 +244,7 @@ Key findings:
 
 ![Revenue trend analysis dashboard](images/05-revenue-trend.png)
 
-Key findings:
+**Key Findings**
 
 - Revenue increased from **$17.80M in 2011** to **$27.52M in 2012**, a **54.6% increase**.
 - By November 2013, revenue had reached **$33.07M**, already exceeding the full-year 2012 result.
@@ -163,7 +256,7 @@ Key findings:
 
 ![Profit trend analysis dashboard](images/06-profit-trend.png)
 
-Key findings:
+**Key Findings**
 
 - Profit increased from **$12.27M in 2011** to **$18.98M in 2012**, a **54.7% increase**.
 - Profit reached **$22.58M by November 2013**.
@@ -175,7 +268,7 @@ Key findings:
 
 ![Cost trend analysis dashboard](images/07-cost-trend.png)
 
-Key findings:
+**Key Findings**
 
 - Total cost reached **$24.70M**, or approximately **31.3% of revenue**.
 - Cost increased from **$5.53M in 2011** to **$8.54M in 2012**, closely matching revenue and profit growth and indicating stable cost efficiency.
@@ -193,18 +286,31 @@ This page is designed as a drill-through destination. From a selected country, t
 - Contribution by region, state, and city through a decomposition tree.
 - A dynamic Top-N view of the highest-revenue customers.
 
-For Canada in 2012, revenue increased by **51%**, profit by **52%**, and cost by **49%**, while the customer base increased by 25 and orders increased by 90. The Top 3 customers generated roughly **$1.01M**, showing a meaningful concentration of country revenue among a small number of accounts.
+**Key Findings**
 
-## Main Business Recommendations
+- For Canada in 2012, revenue increased by **51%**, profit by **52%**, and cost by **49%**, while the customer base increased by 25 and orders increased by 90.
+- The Top 3 customers generated roughly **$1.01M**, showing a meaningful concentration of country revenue among a small number of accounts.
 
-1. **Investigate the 100% Egg Protein return issue.** Prioritize the 2011–2012 period and the Southeast and Northeast regions, then review the higher-priced SKUs, batches, and fulfillment process.
-2. **Protect profitable core products.** Maintain availability of Pure Casein Protein and other high-contribution products while monitoring their absolute return exposure.
-3. **Improve Brazil's product economics.** Review pricing, procurement, and product mix for Concentrate, Hydrolyzed, and Isolate Whey Protein, particularly the 5 lb variants.
-4. **Activate and retain more customers.** Target the 66 never-ordered customers with onboarding offers, and create lifecycle campaigns for customers whose purchasing frequency is declining.
-5. **Plan around seasonality.** Prepare inventory and campaigns for the strong January demand period and investigate the repeated June slowdown.
-6. **Balance margin and scale.** Test premium and high-margin products selectively rather than treating a high margin percentage alone as proof of growth potential.
+<div align="right"><a href="#top">⬆ back to top</a></div>
 
-## Analytical Features
+---
+
+## 💡 Main Business Recommendations
+
+| # | Recommendation | Action |
+| :---: | --- | --- |
+| 1 | **Investigate the 100% Egg Protein return issue** | Prioritize the 2011–2012 period and the Southeast and Northeast regions, then review the higher-priced SKUs, batches, and fulfillment process. |
+| 2 | **Protect profitable core products** | Maintain availability of Pure Casein Protein and other high-contribution products while monitoring their absolute return exposure. |
+| 3 | **Improve Brazil's product economics** | Review pricing, procurement, and product mix for Concentrate, Hydrolyzed, and Isolate Whey Protein, particularly the 5 lb variants. |
+| 4 | **Activate and retain more customers** | Target the 66 never-ordered customers with onboarding offers, and create lifecycle campaigns for customers whose purchasing frequency is declining. |
+| 5 | **Plan around seasonality** | Prepare inventory and campaigns for the strong January demand period and investigate the repeated June slowdown. |
+| 6 | **Balance margin and scale** | Test premium and high-margin products selectively rather than treating a high margin percentage alone as proof of growth potential. |
+
+<div align="right"><a href="#top">⬆ back to top</a></div>
+
+---
+
+## ⚙️ Analytical Features
 
 - DAX-based revenue, cost, gross profit, margin, AOV, and return measures.
 - Year-over-year and month-over-month comparisons.
@@ -216,7 +322,11 @@ For Canada in 2012, revenue increased by **51%**, profit by **52%**, and cost by
 - Decomposition tree and dynamic Top-N customer analysis.
 - Consistent page navigation and report branding.
 
-## Important Data Notes
+<div align="right"><a href="#top">⬆ back to top</a></div>
+
+---
+
+## 📝 Important Data Notes
 
 - The source data is not published in this repository.
 - 2010 is a partial baseline and should not be used as a normal full-year comparison.
@@ -226,15 +336,25 @@ For Canada in 2012, revenue increased by **51%**, profit by **52%**, and cost by
 - Return-order counts represent orders containing at least one returned item and should not be interpreted as fully cancelled orders.
 - The reported profit is a gross-profit measure derived from revenue and product cost; returns are analyzed separately.
 
-## Tools and Skills
+<div align="right"><a href="#top">⬆ back to top</a></div>
 
-- **Power BI Desktop** — dashboard design and interactive reporting.
-- **Power Query** — cleaning, merging, and transforming source tables.
-- **DAX** — KPIs, time intelligence, ratios, rankings, and dynamic titles.
-- **Excel** — original tabular data sources.
-- **Data Modeling** — denormalization, shared dimensions, and star-style modeling.
+---
 
-## Repository Structure
+## 🛠️ Tools and Skills
+
+| Tool / Skill | Role in this project |
+| --- | --- |
+| 📊 **Power BI Desktop** | Dashboard design and interactive reporting. |
+| 🔧 **Power Query** | Cleaning, merging, and transforming source tables. |
+| 🧮 **DAX** | KPIs, time intelligence, ratios, rankings, and dynamic titles. |
+| 📈 **Excel** | Original tabular data sources. |
+| 🗂️ **Data Modeling** | Denormalization, shared dimensions, and star-style modeling. |
+
+<div align="right"><a href="#top">⬆ back to top</a></div>
+
+---
+
+## 📁 Repository Structure
 
 ```text
 Gym-Business-Performance-Dashboard/
@@ -254,9 +374,14 @@ Gym-Business-Performance-Dashboard/
     └── 10-data-model-after.png
 ```
 
-## Author
+<div align="right"><a href="#top">⬆ back to top</a></div>
 
-**Seif Gamal**  
-Electrical Power & Machines Engineering Student — Alexandria University  
+---
+
+## 👤 Author
+
+**Asem Fared**
+AI & DATA SCIENTIST Student — Menofia University
 Data Analysis and Power BI Portfolio Project
 
+<div align="right"><a href="#top">⬆ back to top</a></div>
