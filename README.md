@@ -354,34 +354,8 @@ This page is designed as a drill-through destination. From a selected country, t
 
 ---
 
-## 📁 Repository Structure
-
-```text
-Gym-Business-Performance-Dashboard/
-├── README.md
-├── .gitignore
-└── images/
-    ├── 00-cover.png
-    ├── 01-overview.png
-    ├── 02-customer-analysis.png
-    ├── 03-product-analysis.png
-    ├── 04-returns-analysis.png
-    ├── 05-revenue-trend.png
-    ├── 06-profit-trend.png
-    ├── 07-cost-trend.png
-    ├── 08-location-drillthrough.png
-    ├── 09-data-model-before.png
-    └── 10-data-model-after.png
-```
-
-<div align="right"><a href="#top">⬆ back to top</a></div>
-
----
-
 ## 👤 Author
 
-**Asem Fared**
-AI & DATA SCIENTIST Student — Menofia University
-Data Analysis and Power BI Portfolio Project
+Asem Fared<br> AI & Data Scientist Student — Menofia University<br> Data Analysis and Power BI Portfolio Project
 
 <div align="right"><a href="#top">⬆ back to top</a></div>
