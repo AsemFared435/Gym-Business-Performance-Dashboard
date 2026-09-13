@@ -256,7 +256,7 @@ Gym-Business-Performance-Dashboard/
 
 ## Author
 
-**Seif Gamal**  
-Electrical Power & Machines Engineering Student — Alexandria University  
+**Asem Fared**  
+Ai & Data Scientist Student — Menofia University  
 Data Analysis and Power BI Portfolio Project
 
